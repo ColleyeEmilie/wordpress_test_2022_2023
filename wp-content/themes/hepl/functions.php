@@ -51,3 +51,21 @@ function hepl_register_custom_post_types(): void
     ]);
 };
 add_action('init', 'hepl_register_custom_post_types');
+
+//charger les traductions existantes
+load_theme_textdomain('hepl', get_template_directory() . '/translation');
+
+//ajouter le système personnalisé de remplacement des variables dans les phrases traduisibles
+function __hepl(string $translation, array $replacements=[]){
+    //1. récupérer la traduction de la phrase présente dans $translation
+    $base = __($translation, 'hepl');
+
+    //2. On va remplacer toutes les occurences des variables par leurs valeurs.
+    foreach ($replacements as $key =>$value){
+        $variable = ':' . $key;
+        $base = str_replace($variable, $value, $base);
+    }
+
+    //3. On va retourner la traduction complète.
+    return $base;
+}
