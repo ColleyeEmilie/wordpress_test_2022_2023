@@ -102,21 +102,18 @@ function hepl_execute_contact_form()
     ];
 
     (new \Hepl\ContactForm($config, $_POST))
-
+        ->sanitize([
+            'firstname' => 'text_field',
+            'lastname' => 'text_field',
+            'email' => 'email',
+            'message' => 'textarea_field',
+        ])
    ->validate([
         'firstname' => ['required'],
         'lastname' => ['required'],
         'email' => ['required','email'],
         'message' => [],
     ])
-
-    ->sanitize([
-        'firstname' => 'text_field',
-        'lastname' => 'text_field',
-        'email' => 'email',
-        'message' => 'textarea_field',
-    ])
-
     ->save(
         title: fn($data) => $data['firstname'] . ' ' . $data['lastname'] . ' <' . $data['email'] . '>',
         content: fn($data) => $data['message'],
